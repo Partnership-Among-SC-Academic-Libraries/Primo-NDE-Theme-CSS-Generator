@@ -123,7 +123,7 @@ sass \
     --load-path=node_modules \
     _customized-theme.scss \
     customized-theme.css \
-    --style=compressed \
+    --style=expanded \
     --no-source-map
 ```
 

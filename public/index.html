@@ -6,8 +6,9 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 
-    <title>Angular Material M3 Theme Generator</title>
+    <title>PASCAL Angular Material M3 Theme Generator</title>
 
     <style>
         body {
@@ -336,6 +337,42 @@
             box-shadow: none;
         }
 
+        .generate-button-content {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+        }
+
+        .generate-spinner {
+            display: none;
+
+            width: 15px;
+            height: 15px;
+
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+
+            animation: generate-spin 0.75s linear infinite;
+        }
+
+        .generate-button.is-generating .generate-spinner {
+            display: inline-block;
+        }
+
+        @keyframes generate-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .generate-spinner {
+                animation: none;
+            }
+        }
+
         #status {
             margin-top: 12px;
 
@@ -658,10 +695,25 @@
                     id="generateButton"
                     class="generate-button"
                 >
-                    Generate Theme CSS
+                    <span class="generate-button-content">
+                        <span
+                            id="generateButtonLabel"
+                        >
+                            Generate Theme CSS
+                        </span>
+
+                        <span
+                            class="generate-spinner"
+                            aria-hidden="true"
+                        ></span>
+                    </span>
                 </button>
 
-                <div id="status"></div>
+                <div
+                    id="status"
+                    role="status"
+                    aria-live="polite"
+                ></div>
 
             </div>
 
@@ -697,6 +749,8 @@
         const status = document.getElementById('status');
         const generateButton =
             document.getElementById('generateButton');
+        const generateButtonLabel =
+            document.getElementById('generateButtonLabel');
 
         const colorNames = [
             'primary',
@@ -810,6 +864,10 @@
                     'Generating theme...';
 
                 generateButton.disabled = true;
+                generateButton.classList.add('is-generating');
+                generateButton.setAttribute('aria-busy', 'true');
+                generateButtonLabel.textContent =
+                    'Generating...';
 
 
                 const body = {
@@ -918,6 +976,10 @@
                 finally {
 
                     generateButton.disabled = false;
+                    generateButton.classList.remove('is-generating');
+                    generateButton.removeAttribute('aria-busy');
+                    generateButtonLabel.textContent =
+                        'Generate Theme CSS';
 
                 }
 
